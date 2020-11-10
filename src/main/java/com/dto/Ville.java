@@ -11,13 +11,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Ville {
 
-	public String nomCommune;
+	private String nomCommune;
 	
-	public String codeCommune;
+	private String codeCommune;
 	
-	public String codePostal;
+	private String codePostal;
 	
-	public String ligne;
+	private String ligne;
 	
-	public String libelleAcheminement;
+	private String libelleAcheminement;
 }
