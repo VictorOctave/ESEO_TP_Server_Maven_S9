@@ -97,6 +97,7 @@ public class VilleDAOImpl implements VilleDAO {
 				ville.setLongitude(res.getString(7));
 		        listeVilles.add(ville);
 			}
+			
 			res.close();
 			
 		} catch (ClassNotFoundException | SQLException e) {
