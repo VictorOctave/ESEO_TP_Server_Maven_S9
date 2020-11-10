@@ -20,4 +20,8 @@ public class Ville {
 	private String ligne;
 	
 	private String libelleAcheminement;
+	
+	private String longitude;
+	
+	private String latitude;
 }

@@ -29,6 +29,8 @@ public class VilleDAOImpl implements VilleDAO {
 			ville.setCodePostal(res.getString(3));
 			ville.setLibelleAcheminement(res.getString(4));
 			ville.setLigne(res.getString(5));
+			ville.setLatitude(res.getString(6));
+			ville.setLatitude(res.getString(7));
 	        listeVilles.add(ville);
 		}
 			
@@ -52,6 +54,8 @@ public class VilleDAOImpl implements VilleDAO {
 			ville.setCodePostal(res.getString(3));
 			ville.setLibelleAcheminement(res.getString(4));
 			ville.setLigne(res.getString(5));
+			ville.setLatitude(res.getString(6));
+			ville.setLatitude(res.getString(7));
 	        listeVilles.add(ville);
 		}
 			
@@ -75,12 +79,25 @@ public class VilleDAOImpl implements VilleDAO {
 			ville.setCodePostal(res.getString(3));
 			ville.setLibelleAcheminement(res.getString(4));
 			ville.setLigne(res.getString(5));
+			ville.setLatitude(res.getString(6));
+			ville.setLatitude(res.getString(7));
 	        listeVilles.add(ville);
 		}
 			
 	    connexion.close();
 		
 		return listeVilles;
+	}
+	
+	@Override
+	public void creerVille(Ville ville) throws ClassNotFoundException, SQLException {
+		Connection connexion = JDBCConfiguration.getConnection();
+	    Statement stmt = connexion.createStatement();
+	    stmt.executeUpdate("INSERT INTO ville_france VALUES ("+ville.getCodeCommune()+
+	    		",'"+ville.getNomCommune()+"',"+ville.getCodePostal()+",'"+ville.getLibelleAcheminement()
+	    		+"','"+ville.getLigne()+"',"+ville.getLatitude()+","+ville.getLongitude()+")");
+	    
+	    connexion.close();
 	}
 	
 

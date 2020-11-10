@@ -12,5 +12,6 @@ public interface VilleDAO {
 	public ArrayList<Ville> findVilleByPostalCode(String codePostal) throws SQLException, ClassNotFoundException;
 	
 	public ArrayList<Ville> findVilleByName(String nomCommune) throws SQLException, ClassNotFoundException;
-	
+
+	public void creerVille(Ville ville) throws ClassNotFoundException, SQLException;
 }

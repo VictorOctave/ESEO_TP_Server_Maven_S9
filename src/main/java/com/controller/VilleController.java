@@ -4,8 +4,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,12 +20,18 @@ public class VilleController {
 	@Autowired
 	VilleBLOImpl service;
 	
-	@RequestMapping(value = "/ville", method = RequestMethod.GET)
+	@GetMapping("/ville")
 	@ResponseBody
-	public ArrayList<Ville> getVilles(@RequestParam(value = "codepostal", required = false) String codePostal,
+	public ArrayList<Ville> appelGet(@RequestParam(value = "codepostal", required = false) String codePostal,
 			@RequestParam(value = "nom", required = false) String nomCommune) throws ClassNotFoundException, SQLException {
 		System.out.println("Appel Get"); 
 		
 		return service.getInfoVille(codePostal, nomCommune);
+	}
+	
+	@PostMapping("/ville")
+	public void appelPost(@RequestBody Ville ville) throws ClassNotFoundException, SQLException {
+		System.out.println("Appel Post"); 
+		service.creerVille(ville);
 	}
 }

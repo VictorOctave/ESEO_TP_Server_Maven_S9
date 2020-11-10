@@ -30,5 +30,10 @@ public class VilleBLOImpl implements VilleBLO{
 		
 		return listeVilles;
 	}
+	
+	@Override
+	public void creerVille(Ville ville) throws ClassNotFoundException, SQLException {
+		dao.creerVille(ville);
+	}
 
 }
