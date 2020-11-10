@@ -18,7 +18,7 @@ public class VilleBLOImpl implements VilleBLO{
 	@Override
 	public ArrayList<Ville> getInfoVille(String codeCommune, String codePostal, String nomCommune) throws ClassNotFoundException, SQLException {
 		
-		ArrayList<Ville> listeVilles = new ArrayList<>();
+		ArrayList<Ville> listeVilles;
 		
 		if(codeCommune != null) {
 			listeVilles = dao.findVilleByTownCode(codeCommune, false);

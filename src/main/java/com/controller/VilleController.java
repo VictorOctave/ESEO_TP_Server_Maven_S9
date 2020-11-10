@@ -1,7 +1,7 @@
 package com.controller;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,7 +25,7 @@ public class VilleController {
 	
 	@GetMapping("/ville")
 	@ResponseBody
-	public ArrayList<Ville> appelGet(@RequestParam(value = "codecommune", required = false) String codeCommune,
+	public List<Ville> appelGet(@RequestParam(value = "codecommune", required = false) String codeCommune,
 			@RequestParam(value = "codepostal", required = false) String codePostal,
 			@RequestParam(value = "nom", required = false) String nomCommune) throws ClassNotFoundException, SQLException {
 		System.out.println("Appel Get"); 
@@ -45,10 +45,10 @@ public class VilleController {
 		service.modifierVille(ville);
 	}
 	
-	@DeleteMapping("/ville/delete/{code_commune_INSEE}")
-	public void appelDelete(@PathVariable String code_commune_INSEE) throws ClassNotFoundException, SQLException {
+	@DeleteMapping("/ville/delete/{codeCommuneInsee}")
+	public void appelDelete(@PathVariable String codeCommuneInsee) throws ClassNotFoundException, SQLException {
 		System.out.println("Appel Delete"); 
-		Ville ville = service.getInfoVille(code_commune_INSEE, null, null).get(0);
+		Ville ville = service.getInfoVille(codeCommuneInsee, null, null).get(0);
 		ville.setDeleted(true);
 		service.modifierVille(ville);
 	}
