@@ -16,11 +16,13 @@ public class VilleBLOImpl implements VilleBLO{
 	VilleDAOImpl dao;
 
 	@Override
-	public ArrayList<Ville> getInfoVille(String codePostal, String nomCommune) throws ClassNotFoundException, SQLException {
+	public ArrayList<Ville> getInfoVille(String codeCommune, String codePostal, String nomCommune) throws ClassNotFoundException, SQLException {
 		
 		ArrayList<Ville> listeVilles = new ArrayList<>();
 		
-		if(nomCommune != null) {
+		if(codeCommune != null) {
+			listeVilles = dao.findVilleByTownCode(codeCommune, false);
+		} else if(nomCommune != null) {
 			listeVilles = dao.findVilleByName(nomCommune);
 		} else if(codePostal != null) {
 			listeVilles = dao.findVilleByPostalCode(codePostal);
@@ -38,7 +40,7 @@ public class VilleBLOImpl implements VilleBLO{
 	
 	@Override
 	public void modifierVille(Ville ville) throws ClassNotFoundException, SQLException {
-		if(dao.findVilleByTownCode(ville.getCodeCommune()).size()==0) {
+		if(dao.findVilleByTownCode(ville.getCodeCommune(), true).size()==0) {
 			dao.creerVille(ville);
 		} else {
 			dao.modifierVille(ville);

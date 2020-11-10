@@ -11,7 +11,7 @@ public interface VilleDAO {
 	
 	public ArrayList<Ville> findVilleByPostalCode(String codePostal) throws SQLException, ClassNotFoundException;
 	
-	public ArrayList<Ville> findVilleByTownCode(String codePostal) throws SQLException, ClassNotFoundException;
+	public ArrayList<Ville> findVilleByTownCode(String codePostal, boolean evenIfDeleted) throws SQLException, ClassNotFoundException;
 	
 	public ArrayList<Ville> findVilleByName(String nomCommune) throws SQLException, ClassNotFoundException;
 

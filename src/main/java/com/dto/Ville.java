@@ -24,4 +24,7 @@ public class Ville {
 	private String longitude;
 	
 	private String latitude;
+	
+	@Builder.Default
+	private boolean deleted = false;
 }

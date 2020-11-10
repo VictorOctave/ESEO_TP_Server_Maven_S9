@@ -7,7 +7,7 @@ import com.dto.Ville;
 
 public interface VilleBLO {
 
-	public ArrayList<Ville> getInfoVille(String codePostal, String nomCommune) throws ClassNotFoundException, SQLException;
+	public ArrayList<Ville> getInfoVille(String codeCommune, String codePostal, String nomCommune) throws ClassNotFoundException, SQLException;
 	
 	public void creerVille(Ville ville) throws ClassNotFoundException, SQLException;
 	

@@ -20,7 +20,7 @@ public class VilleDAOImpl implements VilleDAO {
 		
 	    Connection connexion = JDBCConfiguration.getConnection();
 	    Statement stmt = connexion.createStatement();
-	    ResultSet res = stmt.executeQuery("SELECT * FROM ville_france");
+	    ResultSet res = stmt.executeQuery("SELECT * FROM ville_france WHERE deleted=false");
 		
 		while(res.next()) {
 			Ville ville = new Ville();
@@ -30,7 +30,7 @@ public class VilleDAOImpl implements VilleDAO {
 			ville.setLibelleAcheminement(res.getString(4));
 			ville.setLigne(res.getString(5));
 			ville.setLatitude(res.getString(6));
-			ville.setLatitude(res.getString(7));
+			ville.setLongitude(res.getString(7));
 	        listeVilles.add(ville);
 		}
 			
@@ -45,7 +45,8 @@ public class VilleDAOImpl implements VilleDAO {
 		
 	    Connection connexion = JDBCConfiguration.getConnection();
 	    Statement stmt = connexion.createStatement();
-	    ResultSet res = stmt.executeQuery("SELECT * FROM ville_france WHERE Code_postal="+codePostal);
+	    ResultSet res = stmt.executeQuery("SELECT * FROM ville_france WHERE Code_postal="+codePostal
+	    									+" AND deleted=false");
 		
 		while(res.next()) {
 			Ville ville = new Ville();
@@ -55,7 +56,7 @@ public class VilleDAOImpl implements VilleDAO {
 			ville.setLibelleAcheminement(res.getString(4));
 			ville.setLigne(res.getString(5));
 			ville.setLatitude(res.getString(6));
-			ville.setLatitude(res.getString(7));
+			ville.setLongitude(res.getString(7));
 	        listeVilles.add(ville);
 		}
 			
@@ -65,13 +66,19 @@ public class VilleDAOImpl implements VilleDAO {
 	}
 	
 	@Override
-	public ArrayList<Ville> findVilleByTownCode(String codeCommune) throws SQLException, ClassNotFoundException {
+	public ArrayList<Ville> findVilleByTownCode(String codeCommune, boolean evenIfDeleted) throws SQLException, ClassNotFoundException {
 		ArrayList<Ville> listeVilles = new ArrayList<>();
 		
 	    Connection connexion = JDBCConfiguration.getConnection();
 	    Statement stmt = connexion.createStatement();
-	    ResultSet res = stmt.executeQuery("SELECT * FROM ville_france WHERE Code_commune_INSEE="+codeCommune);
-		
+	    ResultSet res;
+	    if(evenIfDeleted) {
+	    	res = stmt.executeQuery("SELECT * FROM ville_france WHERE Code_commune_INSEE="+codeCommune);
+	    } else {
+	    	res = stmt.executeQuery("SELECT * FROM ville_france WHERE Code_commune_INSEE="+codeCommune
+					+" AND deleted=false");
+	    }
+	    
 		while(res.next()) {
 			Ville ville = new Ville();
 			ville.setCodeCommune(res.getString(1));
@@ -80,7 +87,7 @@ public class VilleDAOImpl implements VilleDAO {
 			ville.setLibelleAcheminement(res.getString(4));
 			ville.setLigne(res.getString(5));
 			ville.setLatitude(res.getString(6));
-			ville.setLatitude(res.getString(7));
+			ville.setLongitude(res.getString(7));
 	        listeVilles.add(ville);
 		}
 			
@@ -95,7 +102,8 @@ public class VilleDAOImpl implements VilleDAO {
 		
 	    Connection connexion = JDBCConfiguration.getConnection();
 	    Statement stmt = connexion.createStatement();
-	    ResultSet res = stmt.executeQuery("SELECT * FROM ville_france WHERE Nom_commune='"+nomCommune.toUpperCase()+"'");
+	    ResultSet res = stmt.executeQuery("SELECT * FROM ville_france WHERE Nom_commune='"+nomCommune.toUpperCase()+"'"
+	    									+" AND deleted=false");
 		
 		while(res.next()) {
 			Ville ville = new Ville();
@@ -105,7 +113,7 @@ public class VilleDAOImpl implements VilleDAO {
 			ville.setLibelleAcheminement(res.getString(4));
 			ville.setLigne(res.getString(5));
 			ville.setLatitude(res.getString(6));
-			ville.setLatitude(res.getString(7));
+			ville.setLongitude(res.getString(7));
 	        listeVilles.add(ville);
 		}
 			
@@ -120,7 +128,8 @@ public class VilleDAOImpl implements VilleDAO {
 	    Statement stmt = connexion.createStatement();
 	    stmt.executeUpdate("INSERT INTO ville_france VALUES ("+ville.getCodeCommune()+
 	    		",'"+ville.getNomCommune()+"',"+ville.getCodePostal()+",'"+ville.getLibelleAcheminement()
-	    		+"','"+ville.getLigne()+"',"+ville.getLatitude()+","+ville.getLongitude()+")");
+	    		+"','"+ville.getLigne()+"',"+ville.getLatitude()+","+ville.getLongitude()+","
+	    		+ville.isDeleted()+")");
 	    
 	    connexion.close();
 	}
@@ -133,7 +142,7 @@ public class VilleDAOImpl implements VilleDAO {
 	    					+"', Code_postal="+ville.getCodePostal()+", Libelle_acheminement='"
 	    					+ville.getLibelleAcheminement()+"', Ligne_5='"+ville.getLigne()
 	    					+"', Latitude="+ville.getLatitude()+", Longitude="+ville.getLongitude()
-	    					+" WHERE Code_commune_INSEE="+ville.getCodeCommune());
+	    					+", deleted="+ville.isDeleted()+" WHERE Code_commune_INSEE="+ville.getCodeCommune());
 	    
 	    connexion.close();
 	}

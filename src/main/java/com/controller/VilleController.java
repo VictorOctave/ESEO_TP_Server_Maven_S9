@@ -4,7 +4,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,11 +25,12 @@ public class VilleController {
 	
 	@GetMapping("/ville")
 	@ResponseBody
-	public ArrayList<Ville> appelGet(@RequestParam(value = "codepostal", required = false) String codePostal,
+	public ArrayList<Ville> appelGet(@RequestParam(value = "codecommune", required = false) String codeCommune,
+			@RequestParam(value = "codepostal", required = false) String codePostal,
 			@RequestParam(value = "nom", required = false) String nomCommune) throws ClassNotFoundException, SQLException {
 		System.out.println("Appel Get"); 
 		
-		return service.getInfoVille(codePostal, nomCommune);
+		return service.getInfoVille(codeCommune, codePostal, nomCommune);
 	}
 	
 	@PostMapping("/ville")
@@ -39,6 +42,14 @@ public class VilleController {
 	@PutMapping("/ville")
 	public void appelPut(@RequestBody Ville ville) throws ClassNotFoundException, SQLException {
 		System.out.println("Appel Put"); 
+		service.modifierVille(ville);
+	}
+	
+	@DeleteMapping("/ville/delete/{code_commune_INSEE}")
+	public void appelDelete(@PathVariable String code_commune_INSEE) throws ClassNotFoundException, SQLException {
+		System.out.println("Appel Delete"); 
+		Ville ville = service.getInfoVille(code_commune_INSEE, null, null).get(0);
+		ville.setDeleted(true);
 		service.modifierVille(ville);
 	}
 }
