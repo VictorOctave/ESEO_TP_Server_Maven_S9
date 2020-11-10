@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,5 +34,11 @@ public class VilleController {
 	public void appelPost(@RequestBody Ville ville) throws ClassNotFoundException, SQLException {
 		System.out.println("Appel Post"); 
 		service.creerVille(ville);
+	}
+	
+	@PutMapping("/ville")
+	public void appelPut(@RequestBody Ville ville) throws ClassNotFoundException, SQLException {
+		System.out.println("Appel Put"); 
+		service.modifierVille(ville);
 	}
 }

@@ -65,6 +65,31 @@ public class VilleDAOImpl implements VilleDAO {
 	}
 	
 	@Override
+	public ArrayList<Ville> findVilleByTownCode(String codeCommune) throws SQLException, ClassNotFoundException {
+		ArrayList<Ville> listeVilles = new ArrayList<>();
+		
+	    Connection connexion = JDBCConfiguration.getConnection();
+	    Statement stmt = connexion.createStatement();
+	    ResultSet res = stmt.executeQuery("SELECT * FROM ville_france WHERE Code_commune_INSEE="+codeCommune);
+		
+		while(res.next()) {
+			Ville ville = new Ville();
+			ville.setCodeCommune(res.getString(1));
+			ville.setNomCommune(res.getString(2));
+			ville.setCodePostal(res.getString(3));
+			ville.setLibelleAcheminement(res.getString(4));
+			ville.setLigne(res.getString(5));
+			ville.setLatitude(res.getString(6));
+			ville.setLatitude(res.getString(7));
+	        listeVilles.add(ville);
+		}
+			
+	    connexion.close();
+		
+		return listeVilles;
+	}
+	
+	@Override
 	public ArrayList<Ville> findVilleByName(String nomCommune) throws SQLException, ClassNotFoundException {
 		ArrayList<Ville> listeVilles = new ArrayList<>();
 		
@@ -100,5 +125,16 @@ public class VilleDAOImpl implements VilleDAO {
 	    connexion.close();
 	}
 	
-
+	@Override
+	public void modifierVille(Ville ville) throws ClassNotFoundException, SQLException {
+		Connection connexion = JDBCConfiguration.getConnection();
+	    Statement stmt = connexion.createStatement();
+	    stmt.executeUpdate("UPDATE ville_france SET Nom_commune='"+ville.getNomCommune()
+	    					+"', Code_postal="+ville.getCodePostal()+", Libelle_acheminement='"
+	    					+ville.getLibelleAcheminement()+"', Ligne_5='"+ville.getLigne()
+	    					+"', Latitude="+ville.getLatitude()+", Longitude="+ville.getLongitude()
+	    					+" WHERE Code_commune_INSEE="+ville.getCodeCommune());
+	    
+	    connexion.close();
+	}
 }

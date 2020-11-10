@@ -35,5 +35,14 @@ public class VilleBLOImpl implements VilleBLO{
 	public void creerVille(Ville ville) throws ClassNotFoundException, SQLException {
 		dao.creerVille(ville);
 	}
+	
+	@Override
+	public void modifierVille(Ville ville) throws ClassNotFoundException, SQLException {
+		if(dao.findVilleByTownCode(ville.getCodeCommune()).size()==0) {
+			dao.creerVille(ville);
+		} else {
+			dao.modifierVille(ville);
+		}
+	}
 
 }
