@@ -14,7 +14,7 @@ import com.dto.Ville;
 @Repository
 public class VilleDAOImpl implements VilleDAO {
 	
-	private static final String erreur = "ERROR : ";
+	private static final String ERREUR = "ERROR : ";
 
 	@Override
 	public ArrayList<Ville> findAllVilles() {
@@ -35,7 +35,7 @@ public class VilleDAOImpl implements VilleDAO {
 				        listeVilles.add(ville);
 					}
 				} catch (ClassNotFoundException | SQLException e) {
-					System.out.println(erreur);
+					System.out.println(ERREUR);
 					e.printStackTrace();
 				} 
 		
@@ -64,7 +64,7 @@ public class VilleDAOImpl implements VilleDAO {
 			}
 			
 		} catch (ClassNotFoundException | SQLException e) {
-			System.out.println(erreur);
+			System.out.println(ERREUR);
 			e.printStackTrace();
 		} 
 		
@@ -75,10 +75,11 @@ public class VilleDAOImpl implements VilleDAO {
 	public ArrayList<Ville> findVilleByTownCode(String codeCommune, boolean evenIfDeleted) {
 		ArrayList<Ville> listeVilles = new ArrayList<>();
 		
+		ResultSet res = null;
+		
 		try (Connection connexion = JDBCConfiguration.getConnection();
 			Statement stmt = connexion.createStatement();){
 			
-			ResultSet res = null;
 		    if(evenIfDeleted) {
 		    	res = stmt.executeQuery("SELECT * FROM ville_france WHERE Code_commune_INSEE="+codeCommune);
 		    } else {
@@ -101,9 +102,16 @@ public class VilleDAOImpl implements VilleDAO {
 			res.close();
 			
 		} catch (ClassNotFoundException | SQLException e) {
-			System.out.println(erreur);
+			System.out.println(ERREUR);
 			e.printStackTrace();
-		} 
+		} finally {
+			try {
+				res.close();
+			} catch (SQLException e) {
+				System.out.println(ERREUR);
+				e.printStackTrace();
+			}
+		}
 	 
 		return listeVilles;
 	}
@@ -129,7 +137,7 @@ public class VilleDAOImpl implements VilleDAO {
 		        listeVilles.add(ville);
 			}
 		} catch (ClassNotFoundException | SQLException e) {
-			System.out.println(erreur);
+			System.out.println(ERREUR);
 			e.printStackTrace();
 		} 
 		
@@ -146,7 +154,7 @@ public class VilleDAOImpl implements VilleDAO {
 		    		+"','"+ville.getLigne()+"',"+ville.getLatitude()+","+ville.getLongitude()+","
 		    		+ville.isDeleted()+")");
 		} catch (ClassNotFoundException | SQLException e) {
-			System.out.println(erreur);
+			System.out.println(ERREUR);
 			e.printStackTrace();
 		} 
 	}
@@ -163,7 +171,7 @@ public class VilleDAOImpl implements VilleDAO {
 							+", deleted="+ville.isDeleted()+" WHERE Code_commune_INSEE="+ville.getCodeCommune());
 			
 		} catch (ClassNotFoundException | SQLException e) {
-			System.out.println(erreur);
+			System.out.println(ERREUR);
 			e.printStackTrace();
 		}
 	}
