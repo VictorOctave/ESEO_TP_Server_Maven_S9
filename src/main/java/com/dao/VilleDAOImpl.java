@@ -1,11 +1,13 @@
 package com.dao;
 
+import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.config.JDBCConfiguration;
@@ -15,6 +17,7 @@ import com.dto.Ville;
 public class VilleDAOImpl implements VilleDAO {
 	
 	private static final String ERREUR = "ERROR : ";
+	private static final Logger logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
 	@Override
 	public ArrayList<Ville> findAllVilles() {
@@ -35,8 +38,7 @@ public class VilleDAOImpl implements VilleDAO {
 				        listeVilles.add(ville);
 					}
 				} catch (ClassNotFoundException | SQLException e) {
-					System.out.println(ERREUR);
-					e.printStackTrace();
+					logger.error(ERREUR, e);
 				} 
 		
 		return listeVilles;
@@ -64,8 +66,7 @@ public class VilleDAOImpl implements VilleDAO {
 			}
 			
 		} catch (ClassNotFoundException | SQLException e) {
-			System.out.println(ERREUR);
-			e.printStackTrace();
+			logger.error(ERREUR, e);
 		} 
 		
 		return listeVilles;
@@ -75,17 +76,12 @@ public class VilleDAOImpl implements VilleDAO {
 	public ArrayList<Ville> findVilleByTownCode(String codeCommune, boolean evenIfDeleted) {
 		ArrayList<Ville> listeVilles = new ArrayList<>();
 		
-		ResultSet res = null;
+		String ifDeleted = evenIfDeleted ? "" : " AND deleted=false";
 		
 		try (Connection connexion = JDBCConfiguration.getConnection();
-			Statement stmt = connexion.createStatement();){
-			
-		    if(evenIfDeleted) {
-		    	res = stmt.executeQuery("SELECT * FROM ville_france WHERE Code_commune_INSEE="+codeCommune);
-		    } else {
-		    	res = stmt.executeQuery("SELECT * FROM ville_france WHERE Code_commune_INSEE="+codeCommune
-						+" AND deleted=false");
-		    }
+			Statement stmt = connexion.createStatement();
+			ResultSet res = stmt.executeQuery("SELECT * FROM ville_france "
+					+ "WHERE Code_commune_INSEE="+codeCommune+ ifDeleted)){
 		    
 			while(res.next()) {
 				Ville ville = new Ville();
@@ -99,18 +95,8 @@ public class VilleDAOImpl implements VilleDAO {
 		        listeVilles.add(ville);
 			}
 			
-			res.close();
-			
 		} catch (ClassNotFoundException | SQLException e) {
-			System.out.println(ERREUR);
-			e.printStackTrace();
-		} finally {
-			try {
-				res.close();
-			} catch (SQLException e) {
-				System.out.println(ERREUR);
-				e.printStackTrace();
-			}
+			logger.error(ERREUR, e);
 		}
 	 
 		return listeVilles;
@@ -137,8 +123,7 @@ public class VilleDAOImpl implements VilleDAO {
 		        listeVilles.add(ville);
 			}
 		} catch (ClassNotFoundException | SQLException e) {
-			System.out.println(ERREUR);
-			e.printStackTrace();
+			logger.error(ERREUR, e);
 		} 
 		
 		
@@ -154,8 +139,7 @@ public class VilleDAOImpl implements VilleDAO {
 		    		+"','"+ville.getLigne()+"',"+ville.getLatitude()+","+ville.getLongitude()+","
 		    		+ville.isDeleted()+")");
 		} catch (ClassNotFoundException | SQLException e) {
-			System.out.println(ERREUR);
-			e.printStackTrace();
+			logger.error(ERREUR, e);
 		} 
 	}
 	
@@ -171,8 +155,7 @@ public class VilleDAOImpl implements VilleDAO {
 							+", deleted="+ville.isDeleted()+" WHERE Code_commune_INSEE="+ville.getCodeCommune());
 			
 		} catch (ClassNotFoundException | SQLException e) {
-			System.out.println(ERREUR);
-			e.printStackTrace();
+			logger.error(ERREUR, e);
 		}
 	}
 }

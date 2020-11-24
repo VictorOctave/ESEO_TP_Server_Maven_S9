@@ -1,8 +1,10 @@
 package com.controller;
 
+import java.lang.invoke.MethodHandles;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +22,8 @@ import com.dto.Ville;
 @RestController
 public class VilleController {
 	
+	private static final Logger logger = Logger.getLogger(MethodHandles.lookup().lookupClass());
+	
 	@Autowired
 	VilleBLOImpl service;
 	
@@ -28,26 +32,26 @@ public class VilleController {
 	public List<Ville> appelGet(@RequestParam(value = "codecommune", required = false) String codeCommune,
 			@RequestParam(value = "codepostal", required = false) String codePostal,
 			@RequestParam(value = "nom", required = false) String nomCommune) throws ClassNotFoundException, SQLException {
-		System.out.println("Appel Get"); 
+		logger.debug("Appel Get"); 
 		
 		return service.getInfoVille(codeCommune, codePostal, nomCommune);
 	}
 	
 	@PostMapping("/ville")
 	public void appelPost(@RequestBody Ville ville) throws ClassNotFoundException, SQLException {
-		System.out.println("Appel Post"); 
+		logger.debug("Appel Post"); 
 		service.creerVille(ville);
 	}
 	
 	@PutMapping("/ville")
 	public void appelPut(@RequestBody Ville ville) throws ClassNotFoundException, SQLException {
-		System.out.println("Appel Put"); 
+		logger.debug("Appel Put"); 
 		service.modifierVille(ville);
 	}
 	
 	@DeleteMapping("/ville/delete/{codeCommuneInsee}")
 	public void appelDelete(@PathVariable String codeCommuneInsee) throws ClassNotFoundException, SQLException {
-		System.out.println("Appel Delete"); 
+		logger.debug("Appel Delete"); 
 		Ville ville = service.getInfoVille(codeCommuneInsee, null, null).get(0);
 		ville.setDeleted(true);
 		service.modifierVille(ville);
