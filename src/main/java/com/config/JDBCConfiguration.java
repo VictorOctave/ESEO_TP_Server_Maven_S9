@@ -17,7 +17,7 @@ public class JDBCConfiguration {
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		String url = "jdbc:mysql://localhost:3306/twic?zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=UTC";
 		String user = CONFIGURATION.getString("user");
-		String pass = CONFIGURATION.getString("password");;
+		String pass = CONFIGURATION.getString("password");
 	    return DriverManager.getConnection(url, user, pass);
 	}
 

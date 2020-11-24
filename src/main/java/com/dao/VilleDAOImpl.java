@@ -26,17 +26,7 @@ public class VilleDAOImpl implements VilleDAO {
 		try (Connection connexion = JDBCConfiguration.getConnection();
 				Statement stmt = connexion.createStatement();
 				ResultSet res = stmt.executeQuery("SELECT * FROM ville_france WHERE deleted=false");){
-					while(res.next()) {
-						Ville ville = new Ville();
-						ville.setCodeCommune(res.getString(1));
-						ville.setNomCommune(res.getString(2));
-						ville.setCodePostal(res.getString(3));
-						ville.setLibelleAcheminement(res.getString(4));
-						ville.setLigne(res.getString(5));
-						ville.setLatitude(res.getString(6));
-						ville.setLongitude(res.getString(7));
-				        listeVilles.add(ville);
-					}
+					this.traitementResultat(res, listeVilles);
 				} catch (ClassNotFoundException | SQLException e) {
 					logger.error(ERREUR, e);
 				} 
@@ -53,17 +43,7 @@ public class VilleDAOImpl implements VilleDAO {
 				ResultSet res = stmt.executeQuery("SELECT * FROM ville_france WHERE Code_postal="+codePostal
 						+" AND deleted=false");){
 			
-			while(res.next()) {
-				Ville ville = new Ville();
-				ville.setCodeCommune(res.getString(1));
-				ville.setNomCommune(res.getString(2));
-				ville.setCodePostal(res.getString(3));
-				ville.setLibelleAcheminement(res.getString(4));
-				ville.setLigne(res.getString(5));
-				ville.setLatitude(res.getString(6));
-				ville.setLongitude(res.getString(7));
-		        listeVilles.add(ville);
-			}
+			this.traitementResultat(res, listeVilles);
 			
 		} catch (ClassNotFoundException | SQLException e) {
 			logger.error(ERREUR, e);
@@ -83,17 +63,7 @@ public class VilleDAOImpl implements VilleDAO {
 			ResultSet res = stmt.executeQuery("SELECT * FROM ville_france "
 					+ "WHERE Code_commune_INSEE="+codeCommune+ ifDeleted)){
 		    
-			while(res.next()) {
-				Ville ville = new Ville();
-				ville.setCodeCommune(res.getString(1));
-				ville.setNomCommune(res.getString(2));
-				ville.setCodePostal(res.getString(3));
-				ville.setLibelleAcheminement(res.getString(4));
-				ville.setLigne(res.getString(5));
-				ville.setLatitude(res.getString(6));
-				ville.setLongitude(res.getString(7));
-		        listeVilles.add(ville);
-			}
+			this.traitementResultat(res, listeVilles);
 			
 		} catch (ClassNotFoundException | SQLException e) {
 			logger.error(ERREUR, e);
@@ -111,17 +81,7 @@ public class VilleDAOImpl implements VilleDAO {
 				ResultSet res = stmt.executeQuery("SELECT * FROM ville_france WHERE Nom_commune='"+nomCommune.toUpperCase()+"'"
 						+" AND deleted=false");){
 			
-			while(res.next()) {
-				Ville ville = new Ville();
-				ville.setCodeCommune(res.getString(1));
-				ville.setNomCommune(res.getString(2));
-				ville.setCodePostal(res.getString(3));
-				ville.setLibelleAcheminement(res.getString(4));
-				ville.setLigne(res.getString(5));
-				ville.setLatitude(res.getString(6));
-				ville.setLongitude(res.getString(7));
-		        listeVilles.add(ville);
-			}
+			this.traitementResultat(res, listeVilles);
 		} catch (ClassNotFoundException | SQLException e) {
 			logger.error(ERREUR, e);
 		} 
@@ -156,6 +116,20 @@ public class VilleDAOImpl implements VilleDAO {
 			
 		} catch (ClassNotFoundException | SQLException e) {
 			logger.error(ERREUR, e);
+		}
+	}
+	
+	public void traitementResultat(ResultSet res, ArrayList<Ville> listeVilles) throws SQLException {
+		while(res.next()) {
+			Ville ville = new Ville();
+			ville.setCodeCommune(res.getString(1));
+			ville.setNomCommune(res.getString(2));
+			ville.setCodePostal(res.getString(3));
+			ville.setLibelleAcheminement(res.getString(4));
+			ville.setLigne(res.getString(5));
+			ville.setLatitude(res.getString(6));
+			ville.setLongitude(res.getString(7));
+	        listeVilles.add(ville);
 		}
 	}
 }
